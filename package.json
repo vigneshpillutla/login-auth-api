@@ -1,0 +1,24 @@
+{
+  "name": "bookapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vigneshpillutla/bookAPI.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vigneshpillutla/bookAPI/issues"
+  },
+  "homepage": "https://github.com/vigneshpillutla/bookAPI#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
