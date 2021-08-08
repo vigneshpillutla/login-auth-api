@@ -8,4 +8,5 @@ router.post('/signUp',signUpUser)
 
 router.get('/logout',logoutUser)
 
+
 module.exports = router
