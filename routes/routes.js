@@ -15,4 +15,12 @@ router.all('*',(req,res)=>{
     })
 })
 
+router.use((err,req,res,next) => {
+    const statusCode = err.status ?? 400
+    res.status(statusCode).json({
+        success:false,
+        msg: err.message
+    })
+})
+
 module.exports = router;

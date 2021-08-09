@@ -1,35 +1,59 @@
+const { isValidPassword, genHashedPassword, issueJWT} = require('../utils/jwtGenUtils')
+const {UserAuthException} = require('../utils/error')
+const mongoose = require('mongoose')
+const User = mongoose.model('User')
 
-const loginUser = (req,res) => {
-    const { email, password } = req.body
-    if(email && password){
-        return res.status(200).json({
-            successful:true,
-            data:{ email, password },
-            msg:'User Authorized'
-        })
-    }
-    res.status(400).json({
-        successful:false,
-        data:{},
-        msg:'User not Authorized'
+const secret = (req,res,next) =>{
+    res.status(200).json({
+        success:true,
+        msg:"You are authorized!"
     })
 }
+const loginUser = (req,res,next) => {
+    const { email, password } = req.body
+    User.findOne({email:email})
+        .then(user =>{
+            if(!user){
+                throw new UserAuthException("User not found",400)
+            }
+            const {_id,hash,salt} = user
+            const isValid = isValidPassword(password,hash,salt)
 
-const signUpUser = (req,res) => {
+            if(isValid){
+                const {token} = issueJWT(user)
+                const {firstName,lastName,email} = user
+                res.status(200).json({
+                    success:true,
+                    firstName,
+                    lastName,
+                    email,
+                    token
+                })
+            }
+            else{
+                throw new UserAuthException("Invalid password",401)
+            }
+        })
+        .catch(next)
+}
+
+const signUpUser = (req,res,next) => {
     const { firstName, lastName, email, password } = req.body
 
-    if(firstName && lastName && email && password ) {
-        return res.status(200).json({
-            successful:true,
-            data:{ firstName, lastName, email },
-            msg:'User registered!'
-        })
-    }
-    res.status(400).json({
-        successful:false,
-        data:{},
-        msg:'Could not sign up user!'
+    const {salt,hash} = genHashedPassword(password)
+    const newUser = new User({
+        firstName,
+        lastName,
+        email,
+        salt,
+        hash
     })
+    newUser.save()
+        .then(user => {
+            const { token } = issueJWT(user)
+            res.status(200).json({success:true,token})
+        })
+        .catch(next)
 }
 
 const logoutUser = (req,res) => {
@@ -40,4 +64,4 @@ const logoutUser = (req,res) => {
 }
 
 
-module.exports = { loginUser, signUpUser, logoutUser }
+module.exports = { loginUser, signUpUser, logoutUser, secret }

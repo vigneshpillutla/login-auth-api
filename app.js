@@ -6,6 +6,7 @@ const app = express()
 /**
  * ---------Setup configs---------
  */
+require('dotenv').config()
 require('./config/database')
 
 // Load models before passport and routes , future use.
