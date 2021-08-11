@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
     salt: String,
-    hash: String
+    hash: String,
 })
 
 mongoose.model('User', UserSchema)

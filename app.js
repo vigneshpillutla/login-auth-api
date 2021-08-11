@@ -1,6 +1,5 @@
 const express  = require('express')
 const cors = require('cors')
-const passport = require('passport')
 const app = express()
 
 /**
@@ -9,12 +8,9 @@ const app = express()
 require('dotenv').config()
 require('./config/database')
 
-// Load models before passport and routes , future use.
+
 require('./models/user')
-
-require('./config/passport')(passport)
-
-app.use(passport.initialize())
+require('./models/token')
 
 
 app.use(express.json())

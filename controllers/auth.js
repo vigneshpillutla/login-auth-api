@@ -2,6 +2,7 @@ const { isValidPassword, genHashedPassword, issueJWT} = require('../utils/jwtGen
 const {UserAuthException} = require('../utils/error')
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
+const BlackListToken = mongoose.model('BlackListToken')
 
 const secret = (req,res,next) =>{
     res.status(200).json({
@@ -53,14 +54,25 @@ const signUpUser = (req,res,next) => {
             const { token } = issueJWT(user)
             res.status(200).json({success:true,token})
         })
-        .catch(next)
+        .catch(err => {
+            res.status(401).json({
+                successful:false,
+                msg:'Unable to sign up user'
+            })
+        })
 }
 
-const logoutUser = (req,res) => {
-    res.status(200).json({
-        successful:true,
-        msg:'User logged out!'
+const logoutUser = (req,res,next) => {
+    const {exp,token} = (req.jwt);
+    const blackListedToken = new BlackListToken({
+        expireAt:exp*1000,
+        jwt:token
     })
+    blackListedToken.save()
+        .then(blt => {
+            res.status(200).json({success:true,blt})
+        })
+        .catch(next)
 }
 
 

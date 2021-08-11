@@ -16,7 +16,7 @@ router.all('*',(req,res)=>{
 })
 
 router.use((err,req,res,next) => {
-    const statusCode = err.status ?? 400
+    const statusCode = err.status ?? 500
     res.status(statusCode).json({
         success:false,
         msg: err.message
