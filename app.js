@@ -1,27 +1,24 @@
-const express  = require('express')
-const cors = require('cors')
-const app = express()
+const express = require("express");
+const cors = require("cors");
+const app = express();
 
 /**
  * ---------Setup configs---------
  */
-require('dotenv').config()
-require('./config/database')
+app.use(cors());
+require("dotenv").config();
+require("./config/database");
 
+require("./models/user");
+require("./models/token");
 
-require('./models/user')
-require('./models/token')
-
-
-app.use(express.json())
-app.use(express.urlencoded({extended:false}))
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // Include all the routes
-app.use(require('./routes/routes'))
-const port = process.env.PORT || 5000
+app.use(require("./routes/routes"));
+const port = process.env.PORT || 5000;
 
-
-
-app.listen(port,() => {
-    console.log(`Server started on port number ${port}`)
-})
+app.listen(port, () => {
+    console.log(`Server started on port number ${port}`);
+});
