@@ -1,14 +1,23 @@
-const express = require('express')
-const router = express.Router()
-const { loginUser, signUpUser, logoutUser, secret } = require('../controllers/auth')
-const {authorizeUser} = require('../utils/jwtGenUtils')
+const express = require("express");
+const passport = require("passport");
+const router = express.Router();
+const {
+    loginUser,
+    signUpUser,
+    logoutUser,
+    secret,
+} = require("../controllers/auth");
 
-router.post('/login',loginUser)
+router.post(
+    "/login",
+    passport.authenticate("local", { failWithError: true }),
+    loginUser
+);
 
-router.post('/signUp',signUpUser)
+router.post("/signUp", signUpUser);
 
-router.get('/logout',authorizeUser,logoutUser)
+router.get("/logout", logoutUser);
 
-router.get('/secret',authorizeUser,secret)
+router.get("/secret", secret);
 
-module.exports = router
+module.exports = router;

@@ -1,45 +1,28 @@
-const {
-    isValidPassword,
-    genHashedPassword,
-    issueJWT,
-} = require("../utils/jwtGenUtils");
+const { genHashedPassword } = require("../utils/passwordAuthUtils");
 const { UserAuthException } = require("../utils/error");
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
-const BlackListToken = mongoose.model("BlackListToken");
 
+const FilterUser = (user) => {
+    user = Object.entries(user).filter(
+        ([key, _]) => !["hash", "salt", "_id", "__v"].includes(key)
+    );
+    user = Object.fromEntries(user);
+    return user;
+};
 const secret = (req, res, next) => {
+    if (!req.isAuthenticated()) {
+        throw new UserAuthException("User not authorized!", 401);
+    }
     res.status(200).json({
         success: true,
         msg: "You are authorized!",
     });
 };
 const loginUser = (req, res, next) => {
-    const { email, password } = req.body;
-    User.findOne({ email: email })
-        .then((user) => {
-            if (!user) {
-                throw new UserAuthException("User not found", 400);
-            }
-            const { _id, hash, salt } = user;
-            const isValid = isValidPassword(password, hash, salt);
-
-            if (isValid) {
-                const { token } = issueJWT(user);
-                const { firstName, lastName, email } = user;
-                res.status(200).json({
-                    success: true,
-                    firstName,
-                    lastName,
-                    email,
-                    token,
-                });
-            } else if (2 == 2) {
-            } else {
-                throw new UserAuthException("Invalid password", 401);
-            }
-        })
-        .catch(next);
+    let user = req.user.toObject();
+    user = FilterUser(user);
+    res.json({ success: true, user });
 };
 
 const signUpUser = (req, res, next) => {
@@ -56,29 +39,28 @@ const signUpUser = (req, res, next) => {
     newUser
         .save()
         .then((user) => {
-            const { token } = issueJWT(user);
-            res.status(200).json({ success: true, token });
+            user = FilterUser(user?.toObject());
+            res.status(200).json({
+                success: true,
+                msg: "User successfully signed up!",
+                user,
+            });
         })
         .catch((err) => {
             res.status(401).json({
                 successful: false,
                 msg: "Unable to sign up user",
+                err,
             });
         });
 };
 
 const logoutUser = (req, res, next) => {
-    const { exp, token } = req.jwt;
-    const blackListedToken = new BlackListToken({
-        expireAt: exp * 1000,
-        jwt: token,
+    req.logout();
+    res.status(200).json({
+        success: true,
+        msg: "User successfully logged out!",
     });
-    blackListedToken
-        .save()
-        .then((blt) => {
-            res.status(200).json({ success: true, blt });
-        })
-        .catch(next);
 };
 
 module.exports = { loginUser, signUpUser, logoutUser, secret };
