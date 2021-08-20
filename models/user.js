@@ -1,11 +1,14 @@
-const mongoose = require('mongoose')
-
+const mongoose = require('mongoose');
+const findOrCreate = require('mongoose-findorcreate');
 const UserSchema = new mongoose.Schema({
-    email: String,
-    firstName: String,
-    lastName: String,
-    salt: String,
-    hash: String,
-})
+  email: String,
+  firstName: String,
+  lastName: String,
+  googleId: String,
+  salt: String,
+  hash: String,
+});
 
-mongoose.model('User', UserSchema)
+UserSchema.plugin(findOrCreate);
+
+mongoose.model('User', UserSchema);
