@@ -1,6 +1,6 @@
 # Book API
 
-### _API for Login Authentication using JWT._
+### _API for E-Book store._
 
 ## Installing Dependencies
 
