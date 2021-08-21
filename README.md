@@ -1,6 +1,6 @@
 # Book API
 
-### _API for E-Book store._
+### _API for Login Authentication using OAuth and Sessions._
 
 ## Installing Dependencies
 
@@ -11,6 +11,8 @@ npm install
 ```
 
 ## Getting Started
+
+Add the client id's, secrets and urls in `.env`
 
 To run the application in developement environment run this command.(_nodemon required_)
 
