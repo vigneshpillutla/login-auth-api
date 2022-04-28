@@ -1,4 +1,5 @@
 const express = require('express');
+const { sendToken } = require('../utils');
 const auth = require('./auth');
 const socialAuth = require('./socialAuth');
 
@@ -21,10 +22,14 @@ router.all('*', (req, res) => {
 
 router.use((err, req, res, next) => {
   const statusCode = err.status ?? 500;
-  res.status(statusCode).json({
-    success: false,
-    msg: err.message
-  });
+  sendToken(
+    {
+      success: false,
+      msg: err.message
+    },
+    statusCode,
+    res
+  );
 });
 
 module.exports = router;
