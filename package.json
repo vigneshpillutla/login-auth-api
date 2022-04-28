@@ -1,5 +1,5 @@
 {
-  "name": "bookapi",
+  "name": "keeper-api",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vigneshpillutla/bookAPI.git"
+    "url": "git+https://github.com/vigneshpillutla/keeperAPI.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vigneshpillutla/bookAPI/issues"
+    "url": "https://github.com/vigneshpillutla/keeperAPI/issues"
   },
-  "homepage": "https://github.com/vigneshpillutla/bookAPI#readme",
+  "homepage": "https://github.com/vigneshpillutla/keeperAPI#readme",
   "dependencies": {
     "connect-mongo": "^4.4.1",
     "cors": "^2.8.5",
