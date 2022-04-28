@@ -24,17 +24,21 @@ const secret = (req, res, next) => {
 const loginUser = (req, res, next) => {
   let user = req.user.toObject();
   user = filterUser(user);
-  res.json({ success: true, user });
+  sendToken({ success: true, user }, 200, res);
 };
 
 const getUser = asyncHandler(async (req, res, next) => {
   if (req.isAuthenticated()) {
     let user = req.user.toObject();
     user = filterUser(user);
-    return res.status(200).json({
-      success: true,
-      user
-    });
+    return sendToken(
+      {
+        success: true,
+        user
+      },
+      200,
+      res
+    );
   }
   throw new FailedRequest('User not found', 401);
 });
@@ -57,34 +61,23 @@ const signUpUser = asyncHandler(async (req, res, next) => {
     {
       success: true,
       msg: 'User successfully signed up!',
-      user: filterUser(user)
+      user: filterUser(user._doc)
     },
     200,
     res
   );
-  // .then((user) => {
-  //   user = filterUser(user?.toObject());
-  //   res.status(200).json({
-  //     success: true,
-  //     msg: 'User successfully signed up!',
-  //     user,
-  //   });
-  // })
-  // .catch((err) => {
-  //   res.status(401).json({
-  //     success: false,
-  //     msg: 'Unable to sign up user',
-  //     err,
-  //   });
-  // });
 });
 
 const logoutUser = (req, res, next) => {
   req.logout();
-  res.status(200).json({
-    success: true,
-    msg: 'User successfully logged out!'
-  });
+  sendToken(
+    {
+      success: true,
+      msg: 'User successfully logged out!'
+    },
+    200,
+    res
+  );
 };
 
 module.exports = { loginUser, signUpUser, logoutUser, secret, getUser };

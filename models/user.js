@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
   lastName: String,
   googleId: String,
   salt: String,
-  hash: String,
+  hash: String
 });
 
 UserSchema.plugin(findOrCreate);

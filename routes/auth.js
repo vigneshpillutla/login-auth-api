@@ -6,16 +6,18 @@ const {
   signUpUser,
   logoutUser,
   secret,
-  getUser,
+  getUser
 } = require('../controllers/auth');
+const { validateLogin, validateSignUp } = require('../validation');
 
 router.post(
   '/login',
+  validateLogin,
   passport.authenticate('local', { failWithError: true }),
   loginUser
 );
 
-router.post('/signUp', signUpUser);
+router.post('/signUp', validateSignUp, signUpUser);
 
 router.get('/getUser', getUser);
 
