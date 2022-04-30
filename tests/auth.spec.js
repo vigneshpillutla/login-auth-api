@@ -1,6 +1,5 @@
 const request = require('supertest');
-const session = require('express-session');
-const sessionConfig = require('../config/sessions');
+const _ = require('lodash');
 const { mongoose } = require('../config/database');
 const { app, build, cleanUp } = require('../app');
 
@@ -33,8 +32,21 @@ describe('User', () => {
     email: 'testuser@gmail.com',
     password: 'TestUser$1234'
   };
+  const successResponse = {
+    success: true,
+    msg: 'User successfully signed up!',
+    user: {
+      firstName: 'Test',
+      lastName: 'User',
+      email: 'testuser@gmail.com'
+    }
+  };
   it('should create a new user', async () => {
     const response = await request(app).post('/api/auth/signUp').send(testUser);
-    return expect(response.statusCode).toBe(200);
+    return expect(response.body).toEqual(successResponse);
+  });
+  it('should not allow a duplicate user', async () => {
+    const response = await request(app).post('/api/auth/signUp').send(testUser);
+    return expect(response.statusCode).toBe(401);
   });
 });
