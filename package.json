@@ -2,11 +2,11 @@
   "name": "keeper-api",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "Set NODE_ENV=production&& node app.js",
-    "dev": "Set NODE_ENV=development&& nodemon app.js"
+    "test": "jest --detectOpenHandles",
+    "start": "Set NODE_ENV=production&& node server.js",
+    "dev": "Set NODE_ENV=development&& nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -33,5 +33,11 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "jest": "^28.0.2",
+    "superagent": "^7.1.3",
+    "supertest": "^6.2.3"
   }
 }

@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
+const sessionConfig = require('./config/sessions');
+const dbConfig = require('./config/database');
+
 const app = express();
 
 /**
@@ -17,34 +20,37 @@ let corsOptions = {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true,
+  credentials: true
 };
 app.use(cors(corsOptions));
-require('dotenv').config();
-require('./config/database');
-
-require('./models/user');
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+require('dotenv').config();
 
-/**
- * --------Configuring session store ---------
- */
-const sessionOptions = require('./config/sessions');
-app.use(session(sessionOptions));
+module.exports = {
+  app,
+  build: async () => {
+    // Wait for the database connection
+    await dbConfig.connect();
 
-/**
- * --------Configuring Passport with Local Strategy--------
- */
-require('./config/passport')(passport);
-app.use(passport.initialize());
-app.use(passport.session());
+    require('./models/user');
 
-// Include all the routes
-app.use(require('./routes'));
-const port = process.env.PORT || 5000;
+    /**
+     * --------Configuring session store ---------
+     */
+    app.use(session(sessionConfig.connect()));
 
-app.listen(port, () => {
-  console.log(`Server started on port number ${port}`);
-});
+    /**
+     * --------Configuring Passport with Local Strategy--------
+     */
+    require('./config/passport')(passport);
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+    // Include all the routes
+    app.use(require('./routes'));
+  },
+  cleanUp: (done) => {
+    dbConfig.disconnect(done);
+  }
+};

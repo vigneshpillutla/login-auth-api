@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const { sendToken } = require('../utils');
 const auth = require('./auth');
 const socialAuth = require('./socialAuth');

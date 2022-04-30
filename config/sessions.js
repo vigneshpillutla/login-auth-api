@@ -14,20 +14,22 @@ if (!dbConnection) {
   );
 }
 
-const sessionStore = MongoStore.create({
-  mongoUrl: dbConnection,
-  collectionName: 'sessions',
-});
+module.exports = {
+  connect: () => {
+    const sessionStore = MongoStore.create({
+      mongoUrl: dbConnection,
+      collectionName: 'sessions'
+    });
 
-const sessionOptions = {
-  secret: process.env.SECRET,
-  resave: false,
-  saveUninitialized: false,
-  store: sessionStore,
-  cookie: {
-    // 1 week
-    maxAge: 604800000,
-  },
+    return {
+      secret: process.env.SECRET,
+      resave: false,
+      saveUninitialized: false,
+      store: sessionStore,
+      cookie: {
+        // 1 week
+        maxAge: 604800000
+      }
+    };
+  }
 };
-
-module.exports = sessionOptions;
