@@ -47,7 +47,7 @@ const signUpUser = asyncHandler(async (req, res, next) => {
   const { salt, hash } = genHashedPassword(password);
   const existingUser = await User.findOne({ email: email }).exec();
   if (!!existingUser) {
-    throw new FailedRequest('User already exists!', 401);
+    throw new FailedRequest('User already exists!', 400);
   }
   const newUser = new User({
     firstName,
@@ -63,7 +63,7 @@ const signUpUser = asyncHandler(async (req, res, next) => {
       msg: 'User successfully signed up!',
       user: filterUser(user._doc)
     },
-    200,
+    201,
     res
   );
 });

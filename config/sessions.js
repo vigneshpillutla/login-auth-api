@@ -1,4 +1,5 @@
 const MongoStore = require('connect-mongo');
+const { connect } = require('./database');
 
 require('dotenv').config();
 
@@ -15,10 +16,11 @@ if (!dbConnection) {
 }
 
 module.exports = {
-  connect: () => {
+  connect: async () => {
     const sessionStore = MongoStore.create({
-      mongoUrl: dbConnection,
-      collectionName: 'sessions'
+      // mongoUrl: dbConnection,
+      collectionName: 'sessions',
+      clientPromise: connect().then((m) => m.connection.getClient())
     });
 
     return {

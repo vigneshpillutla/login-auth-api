@@ -38,7 +38,8 @@ module.exports = {
     /**
      * --------Configuring session store ---------
      */
-    app.use(session(sessionConfig.connect()));
+    const sessionOptions = await sessionConfig.connect();
+    app.use(session(sessionOptions));
 
     /**
      * --------Configuring Passport with Local Strategy--------
