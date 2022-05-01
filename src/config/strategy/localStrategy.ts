@@ -1,11 +1,11 @@
-const LocalStrategy = require('passport-local');
-const mongoose = require('mongoose');
-const User = mongoose.model('User');
-const { isValidPassword } = require('../../utils/passwordAuthUtils');
+import { Strategy as LocalStrategy } from 'passport-local';
+import mongoose from 'mongoose';
+import { User } from '../../models/user';
+import { isValidPassword } from '../../utils/passwordAuthUtils';
 
 const fieldOptions = {
   usernameField: 'email',
-  passwordField: 'password',
+  passwordField: 'password'
 };
 
 const localStrategy = new LocalStrategy(
@@ -26,4 +26,4 @@ const localStrategy = new LocalStrategy(
   }
 );
 
-module.exports = localStrategy;
+export default localStrategy;
