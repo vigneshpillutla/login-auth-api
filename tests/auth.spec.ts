@@ -8,8 +8,10 @@ const { app, build, cleanUp } = appConfig;
 const serverDomain = '/api';
 const auth = `${serverDomain}/auth`;
 
+jest.setTimeout(2000);
+
 beforeAll(() => {
-  process.env.NODE_ENV = 'development';
+  process.env.NODE_ENV = 'test';
   return build();
 });
 
