@@ -1,8 +1,7 @@
 {
-  "name": "keeper-api",
+  "name": "login-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "description": "A starting point for Node.js Express Mongo apps with typescript and tested using jest.",
   "scripts": {
     "test": "jest --detectOpenHandles",
     "start": "Set NODE_ENV=production&& node server.js",
