@@ -1,8 +1,10 @@
-const request = require('supertest');
-const _ = require('lodash');
-const { mongoose } = require('../config/database');
-const { app, build, cleanUp } = require('../app');
+import request from 'supertest';
+import _ from 'lodash';
+import dbConfig from '../src/config/database';
+import appConfig from '../src/app';
 
+const { mongoose } = dbConfig;
+const { app, build, cleanUp } = appConfig;
 const serverDomain = '/api';
 const auth = `${serverDomain}/auth`;
 
@@ -29,7 +31,7 @@ describe('Check if the api is running and configured', () => {
 });
 
 describe('User', () => {
-  let loginPersistanceCookie;
+  let loginPersistanceCookie: string;
   const testUser = {
     firstName: 'Test',
     lastName: 'User',
