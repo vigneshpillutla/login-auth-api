@@ -1,8 +1,0 @@
-{
-  "exec": "Set NODE_ENV=development && tsc && node --require dotenv/config dist/server.js",
-  "ext": "ts",
-  "watch": ["src"],
-  "events": {
-    "restart": "Set NODE_ENV=development && tsc && node --require dotenv/config dist/server.js"
-  }
-}
