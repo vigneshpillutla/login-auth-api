@@ -1,15 +1,14 @@
 import { genHashedPassword } from '../utils/passwordAuthUtils';
 import { FailedRequest } from '../utils/error';
-import mongoose from 'mongoose';
-import { User } from '../models/user';
+import mongoose, { LeanDocument } from 'mongoose';
+import { User, UserDocument } from '../models/user';
 import asyncHandler from 'express-async-handler';
 import { sendToken } from '../utils';
 import { RequestHandler } from 'express';
 import _ from 'lodash';
 
-const filterUser = (user: object) => {
-  const filteredUser = _.omit(user, ['hash', 'salt', '_id', '__v']);
-
+const filterUser = (user: Express.User) => {
+  const filteredUser = _.pick(user, ['firstName', 'lastName', 'email']);
   return filteredUser;
 };
 const secret: RequestHandler = (req, res, next) => {
@@ -22,19 +21,17 @@ const secret: RequestHandler = (req, res, next) => {
   });
 };
 const loginUser: RequestHandler = (req, res, next) => {
-  let user: object = req.user.toObject();
-  user = filterUser(user);
-  sendToken({ success: true, user }, 200, res);
+  const user = req.user;
+  sendToken({ success: true, user: filterUser(req.user) }, 200, res);
 };
 
 const getUser = asyncHandler(async (req, res, next) => {
   if (req.isAuthenticated()) {
-    let user: object = req.user.toObject();
-    user = filterUser(user);
+    let user = req.user;
     return sendToken(
       {
         success: true,
-        user
+        user: filterUser(user)
       },
       200,
       res
@@ -61,7 +58,7 @@ const signUpUser = asyncHandler(async (req, res, next) => {
     {
       success: true,
       msg: 'User successfully signed up!',
-      user: filterUser(user.toObject())
+      user: filterUser(user)
     },
     201,
     res

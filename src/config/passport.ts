@@ -1,11 +1,11 @@
 import { PassportStatic, use } from 'passport';
-import mongoose, { NativeError, Document } from 'mongoose';
+import mongoose, { NativeError, Document, LeanDocument } from 'mongoose';
 import { User, UserDocument } from '../models/user';
 import localStrategy from './strategy/localStrategy';
 
 declare global {
   namespace Express {
-    interface User extends UserDocument {}
+    interface User extends LeanDocument<UserDocument> {}
   }
 }
 
@@ -17,7 +17,7 @@ export default function (passport: PassportStatic) {
   });
   passport.deserializeUser((id, done) => {
     User.findById(id, (err: NativeError, user: UserDocument) => {
-      done(err, user);
+      done(err, user.toObject());
     });
   });
 }
