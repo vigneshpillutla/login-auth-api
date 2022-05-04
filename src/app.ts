@@ -7,6 +7,9 @@ import session from 'express-session';
 import passport from 'passport';
 import sessionConfig from './config/sessions';
 import dbConfig from './config/database';
+import passportConfig from './config/passport';
+import './models/user';
+import routes from './routes';
 
 const app = express();
 
@@ -35,8 +38,6 @@ export default {
     // Wait for the database connection
     await dbConfig.connect();
 
-    require('./models/user');
-
     /**
      * --------Configuring session store ---------
      */
@@ -46,12 +47,12 @@ export default {
     /**
      * --------Configuring Passport with Local Strategy--------
      */
-    require('./config/passport')(passport);
+    passportConfig(passport);
     app.use(passport.initialize());
     app.use(passport.session());
 
     // Include all the routes
-    app.use(require('./routes'));
+    app.use(routes);
   },
   cleanUp: (done: (err: NativeError) => void) => {
     dbConfig.disconnect(done);

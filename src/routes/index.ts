@@ -36,4 +36,4 @@ router.use(
   }
 );
 
-module.exports = router;
+export default router;

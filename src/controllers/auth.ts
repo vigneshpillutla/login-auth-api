@@ -61,7 +61,7 @@ const signUpUser = asyncHandler(async (req, res, next) => {
     {
       success: true,
       msg: 'User successfully signed up!',
-      user: filterUser(user)
+      user: filterUser(user.toObject())
     },
     201,
     res

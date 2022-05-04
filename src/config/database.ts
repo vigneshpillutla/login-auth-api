@@ -1,4 +1,4 @@
-import mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const connect = () => {
   const devConnection = process.env.DB_STRING_DEV;

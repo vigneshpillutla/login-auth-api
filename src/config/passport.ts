@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-module.exports = function (passport: PassportStatic) {
+export default function (passport: PassportStatic) {
   passport.use(localStrategy);
   // passport.use(googleStrategy);
   passport.serializeUser((user, done) => {
@@ -20,4 +20,4 @@ module.exports = function (passport: PassportStatic) {
       done(err, user);
     });
   });
-};
+}
