@@ -1,9 +1,12 @@
-const express = require('express');
-const cors = require('cors');
-const session = require('express-session');
-const passport = require('passport');
-const sessionConfig = require('./config/sessions');
-const dbConfig = require('./config/database');
+import dotenv from 'dotenv';
+dotenv.config();
+import express from 'express';
+import { NativeError } from 'mongoose';
+import cors, { CorsOptions } from 'cors';
+import session from 'express-session';
+import passport from 'passport';
+import sessionConfig from './config/sessions';
+import dbConfig from './config/database';
 
 const app = express();
 
@@ -12,7 +15,7 @@ const app = express();
  */
 //Add prod and dev strings here
 let whitelist = ['http://localhost:3000'];
-let corsOptions = {
+let corsOptions: CorsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
@@ -25,9 +28,8 @@ let corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-require('dotenv').config();
 
-module.exports = {
+export default {
   app,
   build: async () => {
     // Wait for the database connection
@@ -51,7 +53,7 @@ module.exports = {
     // Include all the routes
     app.use(require('./routes'));
   },
-  cleanUp: (done) => {
+  cleanUp: (done: (err: NativeError) => void) => {
     dbConfig.disconnect(done);
   }
 };

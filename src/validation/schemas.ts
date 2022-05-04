@@ -1,4 +1,4 @@
-const joi = require('joi');
+import joi from 'joi';
 
 const loginSchema = joi
   .object({
@@ -20,7 +20,4 @@ const signUpSchema = loginSchema
   .options({ presence: 'required' })
   .required();
 
-module.exports = {
-  loginSchema,
-  signUpSchema
-};
+export { loginSchema, signUpSchema };

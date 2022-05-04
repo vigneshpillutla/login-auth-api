@@ -1,7 +1,9 @@
-const session = require('express-session');
-const { app, build } = require('./app');
-const dbConfig = require('./config/database');
-const sessionConfig = require('./config/sessions');
+import session from 'express-session';
+import appConfig from './app';
+import dbConfig from './config/database';
+import sessionConfig from './config/sessions';
+
+const { app, build } = appConfig;
 
 build();
 

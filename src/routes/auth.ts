@@ -1,14 +1,14 @@
-const express = require('express');
-const passport = require('passport');
+import express from 'express';
+import passport from 'passport';
 const router = express.Router();
-const {
+import {
   loginUser,
   signUpUser,
   logoutUser,
   secret,
   getUser
-} = require('../controllers/auth');
-const { validateLogin, validateSignUp } = require('../validation');
+} from '../controllers/auth';
+import { validateLogin, validateSignUp } from '../validation';
 
 router.post(
   '/login',
@@ -25,4 +25,4 @@ router.get('/logout', logoutUser);
 
 router.get('/secret', secret);
 
-module.exports = router;
+export default router;

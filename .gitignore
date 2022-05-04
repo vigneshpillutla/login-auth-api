@@ -1,3 +1,6 @@
+#Compiled JS
+dist/
+
 
 # Node Modules
 node_modules/

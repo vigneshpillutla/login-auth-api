@@ -1,5 +1,5 @@
-const asyncHandler = require('express-async-handler');
-const { loginSchema, signUpSchema } = require('./schemas');
+import asyncHandler from 'express-async-handler';
+import { loginSchema, signUpSchema } from './schemas';
 
 const validateLogin = asyncHandler(async (req, res, next) => {
   await loginSchema.validateAsync(req.body);
@@ -11,7 +11,4 @@ const validateSignUp = asyncHandler(async (req, res, next) => {
   next();
 });
 
-module.exports = {
-  validateLogin,
-  validateSignUp
-};
+export { validateLogin, validateSignUp };

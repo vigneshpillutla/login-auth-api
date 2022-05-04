@@ -1,18 +1,18 @@
-const { genHashedPassword } = require('../utils/passwordAuthUtils');
-const { FailedRequest } = require('../utils/error');
-const mongoose = require('mongoose');
-const User = mongoose.model('User');
-const asyncHandler = require('express-async-handler');
-const { sendToken } = require('../utils');
+import { genHashedPassword } from '../utils/passwordAuthUtils';
+import { FailedRequest } from '../utils/error';
+import mongoose from 'mongoose';
+import { User } from '../models/user';
+import asyncHandler from 'express-async-handler';
+import { sendToken } from '../utils';
+import { RequestHandler } from 'express';
+import _ from 'lodash';
 
-const filterUser = (user) => {
-  user = Object.entries(user).filter(
-    ([key, _]) => !['hash', 'salt', '_id', '__v'].includes(key)
-  );
-  user = Object.fromEntries(user);
-  return user;
+const filterUser = (user: object) => {
+  const filteredUser = _.omit(user, ['hash', 'salt', '_id', '__v']);
+
+  return filteredUser;
 };
-const secret = (req, res, next) => {
+const secret: RequestHandler = (req, res, next) => {
   if (!req.isAuthenticated()) {
     throw new FailedRequest('User not authorized!', 401);
   }
@@ -21,15 +21,15 @@ const secret = (req, res, next) => {
     msg: 'You are authorized!'
   });
 };
-const loginUser = (req, res, next) => {
-  let user = req.user.toObject();
+const loginUser: RequestHandler = (req, res, next) => {
+  let user: object = req.user.toObject();
   user = filterUser(user);
   sendToken({ success: true, user }, 200, res);
 };
 
 const getUser = asyncHandler(async (req, res, next) => {
   if (req.isAuthenticated()) {
-    let user = req.user.toObject();
+    let user: object = req.user.toObject();
     user = filterUser(user);
     return sendToken(
       {
@@ -61,14 +61,14 @@ const signUpUser = asyncHandler(async (req, res, next) => {
     {
       success: true,
       msg: 'User successfully signed up!',
-      user: filterUser(user._doc)
+      user: filterUser(user)
     },
     201,
     res
   );
 });
 
-const logoutUser = (req, res, next) => {
+const logoutUser: RequestHandler = (req, res, next) => {
   req.logout();
   sendToken(
     {
@@ -80,4 +80,4 @@ const logoutUser = (req, res, next) => {
   );
 };
 
-module.exports = { loginUser, signUpUser, logoutUser, secret, getUser };
+export { loginUser, signUpUser, logoutUser, secret, getUser };
