@@ -2,6 +2,7 @@ import request from 'supertest';
 import _ from 'lodash';
 import dbConfig from '../src/config/database';
 import appConfig from '../src/app';
+import { cleanDB } from './db';
 
 const { mongoose } = dbConfig;
 const { app, build, cleanUp } = appConfig;
@@ -10,13 +11,13 @@ const auth = `${serverDomain}/auth`;
 
 jest.setTimeout(2000);
 
-beforeAll(() => {
+beforeAll(async () => {
   process.env.NODE_ENV = 'test';
-  return build();
+  await build();
+  return cleanDB();
 });
 
 afterAll((done) => {
-  const { cleanDB } = require('./db');
   cleanDB();
   done();
 });
