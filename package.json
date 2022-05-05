@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vigneshpillutla/keeperAPI.git"
+    "url": "git+https://github.com/vigneshpillutla/login-auth-api.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vigneshpillutla/keeperAPI/issues"
+    "url": "https://github.com/vigneshpillutla/login-auth-api/issues"
   },
-  "homepage": "https://github.com/vigneshpillutla/keeperAPI#readme",
+  "homepage": "https://github.com/vigneshpillutla/login-auth-api#readme",
   "dependencies": {
     "connect-mongo": "^4.4.1",
     "cors": "^2.8.5",
